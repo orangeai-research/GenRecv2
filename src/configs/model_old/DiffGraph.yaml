@@ -1,0 +1,20 @@
+# DiffGraph Config
+embedding_size: 64 # latdim
+# learning_rate: 0.001
+weight_decay: 0.0 # Handled by reg_weight in loss
+reg_weight: 0.03 # reg
+gcn_layer: 1 #2
+uugcn_layer: 1 # 2
+dims: [64]
+d_emb_size: 8
+norm: True
+steps: 10 #100 200 # diffusion steps
+noise_scale: 0.0001
+noise_min: 0.0001
+noise_max: 0.001
+sampling_steps: 0
+dropout: 0.5 # dropRate
+difflr: 0.001
+# batch_size: 2048
+# epochs: 100
+patience: 20

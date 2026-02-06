@@ -1,0 +1,41 @@
+# MVDiff Model Configuration
+# Multi-View Diffusion for multimodal recommender system
+
+# Model parameters
+embedding_size: 64
+gcn_layer_num: 1
+keep_rate: 0.5
+reg_weight: 1.0e-5
+modal_fusion: True
+
+# Contrastive learning parameters
+ssl_reg: 1.0e-2
+temperature: 0.7
+sparse_temp: 0.2
+
+# Diffusion parameters
+noise_scale: 0.1
+noise_min: 0.0001
+noise_max: 0.02
+steps: 5
+d_emb_size: 10
+norm: False
+sampling_steps: 0
+sampling_noise: False
+rebuild_k: 10
+high_order_topk: 2
+e_loss: 0.1
+
+# Sparsity diffusion parameters
+alpha_sparity: 0.01
+beta_sparity: 0.01
+postive_gain_degree: 0.9
+
+# Graph construction parameters
+knn_k: 5
+
+# Audio modality support
+audio_modality: False
+
+# Feature file names (if different from default)
+# audio_feature_file: audio_feat.npy

@@ -1,0 +1,26 @@
+# LD4MRec Config
+embedding_size: 64
+n_layers: 2
+reg_weight: 1.0e-4
+learning_rate: 0.001
+steps: 100 # Diffusion steps T
+noise_schedule: 'linear'
+noise_min: 0.0001
+noise_max: 0.02
+sampling_steps: 0 # Not used for one-step inference? Or maybe T?
+reweight: True
+norm: True
+
+# C-Net
+cnet_hidden_size: 256
+cnet_n_layers: 3
+dropout: 0.1
+
+# SVD
+svd_k: 64 # Rank for SVD
+
+# Smoothing
+smoothing_gamma: 0.1 # gamma for label smoothing
+
+# Importance Sampling
+min_noise_level: 0.001 # alpha_min in paper

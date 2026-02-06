@@ -1,0 +1,35 @@
+# RFMRec: Rectified Flow for Multimodal Recommendation
+# Reference: Liu et al., "Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow", arXiv 2022
+
+# Base embedding settings
+embedding_size: 64
+
+# Enhanced Rectified Flow Network Architecture
+# Deep attention-based velocity network with cross-attention and self-attention
+rf_hidden_dim: 512        # Hidden dimension (increased for better capacity)
+rf_n_layers: 6            # Number of layers (increased from 3 to 6 for deeper network)
+rf_dropout: 0.1
+
+# Rectified Flow Training Settings
+rf_sampling_steps: 100      # ODE solver steps during training
+rf_use_reflow: True         # Enable reflow for fast 1-step sampling
+rf_reflow_steps: 1          # Number of reflow iterations (1 or 2 recommended)
+
+# Loss Weights
+lambda_rf: 1.0              # Rectified Flow loss weight
+lambda_rec: 0.1             # BPR recommendation loss weight
+reg_weight: 1.0e-4          # L2 regularization weight
+
+# Training settings
+learning_rate: 0.001
+epochs: 1000
+train_batch_size: 2048
+eval_batch_size: 4096
+stopping_step: 10
+
+# Optional: Hyperparameter search space
+# Uncomment to enable grid search
+# hyper_parameters: ["rf_hidden_dim", "lambda_rf", "reg_weight"]
+# rf_hidden_dim: [256, 512, 1024]
+# lambda_rf: [0.5, 1.0, 2.0]
+# reg_weight: [1e-05, 1e-04, 1e-03]

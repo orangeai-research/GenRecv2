@@ -1,0 +1,366 @@
+
+################################################################核心超参数搜索###########################################################
+# n_ui_layers:  [1, 2, 3, 4, 5] # 用于探究User-item graph convolution layers的影响
+# rf_sampling_steps: [1, 3, 5, 10, 20, 50] # 用于探究RF采样步数的影响
+# gen_cl_loss:  [0.1, 0.05, 0.01, 0.001, 0.0001] # 用于探究对比损失的影响
+# user_guidance_scale: [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] # 用于探究用户先验知识指导的影响
+# cosine_guidance_scale: [0.05, 0.1, 0.2, 0.4, 0.8, 1.0] # 用于探究余弦相似度梯度指导的影响
+# rf_warmup_epochs: [5, 10, 20, 30, 40] # 用于探究RF预热步数的影响
+################################################################超参数搜索###########################################################
+
+### ########################################################### baby ###########################################################
+# embedding_size: 64
+# learning_rate: 0.001
+# learning_rate_scheduler: [0.96, 20]
+
+# n_ui_layers: 4 # [1, 2, 3, 4, 5] 
+# knn_k: 10                  # K for KNN graph construction
+
+
+# # Regularization
+# reg_weight_1: 1e-05         # L2 regularization weight for embeddings
+# reg_weight_2: 0.1           # L2 regularization weight for noise
+
+# # ===== Rectified Flow Parameters =====
+# use_rf: True                # Enable RF (set False for ablation)
+
+# # RF Network Architecture
+# rf_hidden_dim: 128          # 隐藏层维度
+# rf_n_layers:  3 # [1, 2, 3] # 2              # 网络层数
+# rf_dropout: 0.1             # Dropout率
+
+
+# rf_learning_rate: 0.0001 
+# rf_sampling_steps: 1 # [1, 3, 5, 10, 20, 50]
+# rf_loss_weight: 0.001  
+# rf_weight: 0.3 
+
+# # User Interest Guidance (Prior Knowledge)
+# use_user_guidance: True      # 启用用户先验知识指导
+# user_guidance_scale: 0.2 # [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] 
+# guidance_decay_power: 2.0    # lambda_1(t) = (1-t)^power 的指数（时间衰减）
+
+# # Cosine Similarity Gradient Guidance
+# use_cosine_guidance: True    # 启用余弦相似度梯度指导
+# cosine_guidance_scale: 0.1 # [0.05, 0.1, 0.2, 0.4, 0.8, 1.0] 余弦梯度的缩放因子
+# cosine_decay_power: 2.0      # lambda_2(t) = (1-t)^power 的指数（时间衰减）
+
+# # RF Warmup - 渐进式启用RF
+# rf_warmup_epochs: 10 #[5, 10, 20, 30, 40] 
+# # RF 混合策略
+# # rf_mix_ratio: [0.1, 0.15, 0.2]           # 训练时的混合比例 (0=纯GUME, 1=纯RF)
+# # rf_inference_mix_ratio: [0.2, 0.25, 0.3] # 推理时的混合比例
+# rf_mix_ratio: 0
+# rf_inference_mix_ratio: 0.02 # 0.02 # 0.02 # 0.2
+
+# # 2-RF (Reflow) parameters
+# use_2rf: False                   # Enable 2-Rectified Flow
+# rf_2rf_transition_epoch: 20 # 20      # Start 2-RF at epoch 20 (default: warmup_epochs + 5)
+
+# # Causal denoising parameters (IPW-based)
+# use_denoise: False
+# clean_rating_threshold: 5.0
+# denoise_layers: 2
+# ps_loss_weight: 0.1
+
+# # ===== Training Settings =====
+# epochs: 1000
+# train_batch_size: 2048
+# eval_batch_size: 4096
+# stopping_step: 10
+
+# mm_image_weight: 0.1
+
+# # ===== Wasserstein 模态对齐（可选，易拉低指标，建议先关或小权重+warmup）=====
+# # 图-文：Sliced W2 与 vt_loss 叠加；warmup 后再加、权重宜小（如 0.01）
+# use_wasserstein_vt: False
+# wasserstein_vt_weight: 0.01
+# wasserstein_n_slices: 32
+# wasserstein_warmup_epochs: 40    # 前 N epoch 不加 Wasserstein，再逐渐加
+# # 生成-原始：增强表征 与 原始兴趣表征 分布对齐；detach 原始只拉近增强侧
+# use_wasserstein_gen_align: False
+# wasserstein_gen_weight: 0.01
+# wasserstein_gen_detach_origin: True   # True 时只对增强表征反传，不拖累原始
+
+# gen_cl_loss: 0.01 #[0.1, 0.05, 0.01, 0.001, 0.0001] 
+ 
+# # ===== Dataset-Specific Configurations =====
+# n_layers: 1 # best 1
+# bm_temp: 0.1 # [0.1, 0.3, 0.4, 0.5, 0.6, 0.7] # best 0.1 非常敏感 越小越好
+
+# um_loss: 0.1 #0.1 # [0.1, 0.01, 0.001, 0.0001] # best 0.01
+# vt_loss: 0.1 #[0.2, 0.3, 0.4, 0.5, 0.6] # [0.1, 0.01, 0.001, 0.0001] # 0.1
+
+# ### baby ###
+# gen_cross_reference_save_path: "checkpoint/baby_GenRecv2_origin.pt"
+# gen_cross_reference_path: "checkpoint/baby_GenRecv2_origin.pt"
+
+# hyper_parameters: ["gen_cl_loss"]
+
+### ########################################################### sports ###########################################################
+# embedding_size: 64
+# learning_rate: 0.001
+# learning_rate_scheduler: [0.96, 20]
+
+# n_ui_layers: 4 # [1, 2, 3, 4, 5] # 4             # User-item graph convolution layers
+# knn_k: 10      # K for KNN graph construction
+# # Regularization
+# reg_weight_1: 1e-05         # L2 regularization weight for embeddings
+# reg_weight_2: 0.1           # L2 regularization weight for noise
+
+# # ===== Rectified Flow Parameters =====
+# use_rf: True                # Enable RF (set False for ablation)
+# # RF Network Architecture
+# rf_hidden_dim: 128          # 隐藏层维度
+# rf_n_layers:  3 # [1, 2, 3] # 2              # 网络层数
+# rf_dropout: 0.1             # Dropout率
+
+# # RF Training
+# rf_learning_rate: 0.0001 #[0.1, 0.01, 0.03, 0.001] # 0.0001     # RF模块独立学习率 0.0001
+# rf_sampling_steps: 20 #[1, 3, 5, 10, 20, 50] #3 # 20  #baby:3  sports:20                  [1, 3, 5, 10 , 20] # 20 # 10 # [1, 5, 20, 50] # 10        # ODE采样步数  结论: 越高越好
+# rf_loss_weight: 0.01 #baby:0.001  sports:0.01              [0.02, 0.03, 0.05, 0.001, 0.0001] # 0.01 # [0.01, 0.001, 0.0001]    0.001     # 对比损失的权重系数 # 
+# rf_weight: 0.3 # [0.1, 0.01, 0.001]  #0.1 # 跨模态对齐损失权重   结论：不太敏感
+
+# # User Interest Guidance (Prior Knowledge)
+# use_user_guidance: True      # 启用用户先验知识指导
+# user_guidance_scale: 0.2 #0.2 [0.8, 0.9, 1.0, 1.5, 2.0] # 0.7 # [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] # 0.2     # alpha_1: 用户先验的缩放因子
+# guidance_decay_power: 2.0    # lambda_1(t) = (1-t)^power 的指数（时间衰减）
+
+# # Cosine Similarity Gradient Guidance
+# use_cosine_guidance: True    # 启用余弦相似度梯度指导
+# cosine_guidance_scale: 0.1 # [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] # 0.1   # alpha_2: 余弦梯度的缩放因子
+# cosine_decay_power: 2.0      # lambda_2(t) = (1-t)^power 的指数（时间衰减）
+
+# # RF Warmup - 渐进式启用RF
+# rf_warmup_epochs: 40 #[5, 10, 20, 30, 40] # 用于探究RF预热步数的影响
+
+# # RF 混合策略
+# # rf_mix_ratio: [0.1, 0.15, 0.2]           # 训练时的混合比例 (0=纯GUME, 1=纯RF)
+# # rf_inference_mix_ratio: [0.2, 0.25, 0.3] # 推理时的混合比例
+# rf_mix_ratio: 0
+# rf_inference_mix_ratio: 0.02 # 0.02 # 0.02 # 0.2
+
+# # 2-RF (Reflow) parameters
+# use_2rf: False                   # Enable 2-Rectified Flow
+# rf_2rf_transition_epoch: 20 # 20      # Start 2-RF at epoch 20 (default: warmup_epochs + 5)
+
+# # Causal denoising parameters (IPW-based)
+# use_denoise: False
+# clean_rating_threshold: 5.0
+# denoise_layers: 2
+# ps_loss_weight: 0.1
+
+# # ===== Training Settings =====
+# epochs: 1000
+# train_batch_size: 2048
+# eval_batch_size: 4096
+# stopping_step: 10
+
+# mm_image_weight: 0.1
+
+# # ===== Wasserstein 模态对齐（可选，易拉低指标，建议先关或小权重+warmup）=====
+# # 图-文：Sliced W2 与 vt_loss 叠加；warmup 后再加、权重宜小（如 0.01）
+# use_wasserstein_vt: False
+# wasserstein_vt_weight: 0.01
+# wasserstein_n_slices: 32
+# wasserstein_warmup_epochs: 40    # 前 N epoch 不加 Wasserstein，再逐渐加
+# # 生成-原始：增强表征 与 原始兴趣表征 分布对齐；detach 原始只拉近增强侧
+# use_wasserstein_gen_align: False
+# wasserstein_gen_weight: 0.01
+# wasserstein_gen_detach_origin: True   # True 时只对增强表征反传，不拖累原始
+
+# gen_cl_loss: 0.05 # [0.1, 0.05, 0.01, 0.001, 0.0001] 
+# # ===== Dataset-Specific Configurations =====
+# n_layers: 1 
+# bm_temp: 0.1 
+# um_loss: 0.1 
+# vt_loss: 0.1 
+
+# # ### sports ###
+# gen_cross_reference_save_path: "checkpoint/sports_GenRecv2_origin.pt"
+# gen_cross_reference_path: "checkpoint/sports_GenRecv2_origin.pt"
+
+# hyper_parameters: ["gen_cl_loss"]
+
+
+
+################################################################核心超参数搜索###########################################################
+n_ui_layers:  [1, 2, 3, 4, 5] # 用于探究User-item graph convolution layers的影响
+rf_sampling_steps: [1, 3, 5, 10, 20, 50] # 用于探究RF采样步数的影响
+gen_cl_loss:  [0.1, 0.05, 0.01, 0.001, 0.0001] # 用于探究对比损失的影响
+user_guidance_scale: [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] # 用于探究用户先验知识指导的影响
+cosine_guidance_scale: [0.05, 0.1, 0.2, 0.4, 0.8, 1.0] # 用于探究余弦相似度梯度指导的影响
+rf_warmup_epochs: [5, 10, 20, 30, 40] # 用于探究RF预热步数的影响
+###############################################################超参数搜索###########################################################
+
+
+## ########################################################### clothing ###########################################################
+embedding_size: 64
+learning_rate: 0.001
+learning_rate_scheduler: [0.96, 20]
+
+n_ui_layers: 4 # [1, 2, 3, 4, 5] # 4             # User-item graph convolution layers
+knn_k: 10      # K for KNN graph construction
+# Regularization
+reg_weight_1: 1e-05         # L2 regularization weight for embeddings
+reg_weight_2: 0.1           # L2 regularization weight for noise
+
+# ===== Rectified Flow Parameters =====
+use_rf: True                # Enable RF (set False for ablation)
+# RF Network Architecture
+rf_hidden_dim: 128          # 隐藏层维度
+rf_n_layers:  3 # [1, 2, 3] # 2              # 网络层数
+rf_dropout: 0.1             # Dropout率
+
+# RF Training
+rf_learning_rate: 0.0001 #[0.1, 0.01, 0.03, 0.001] # 0.0001     # RF模块独立学习率 0.0001
+rf_sampling_steps: 20 #[1, 3, 5, 10, 20, 50] #3 # 20  #baby:3  sports:20                  [1, 3, 5, 10 , 20] # 20 # 10 # [1, 5, 20, 50] # 10        # ODE采样步数  结论: 越高越好
+rf_loss_weight: 0.01 #baby:0.001  sports:0.01              [0.02, 0.03, 0.05, 0.001, 0.0001] # 0.01 # [0.01, 0.001, 0.0001]    0.001     # 对比损失的权重系数 # 
+rf_weight: 0.3 # [0.1, 0.01, 0.001]  #0.1 # 跨模态对齐损失权重   结论：不太敏感
+
+# User Interest Guidance (Prior Knowledge)
+use_user_guidance: True      # 启用用户先验知识指导
+user_guidance_scale: 0.2 #0.2 [0.8, 0.9, 1.0, 1.5, 2.0] # 0.7 # [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] # 0.2     # alpha_1: 用户先验的缩放因子
+guidance_decay_power: 2.0    # lambda_1(t) = (1-t)^power 的指数（时间衰减）
+
+# Cosine Similarity Gradient Guidance
+use_cosine_guidance: True    # 启用余弦相似度梯度指导
+cosine_guidance_scale: 0.1 # [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] # 0.1   # alpha_2: 余弦梯度的缩放因子
+cosine_decay_power: 2.0      # lambda_2(t) = (1-t)^power 的指数（时间衰减）
+
+# RF Warmup - 渐进式启用RF
+rf_warmup_epochs: 40 #[5, 10, 20, 30, 40] # 用于探究RF预热步数的影响
+
+# RF 混合策略
+# rf_mix_ratio: [0.1, 0.15, 0.2]           # 训练时的混合比例 (0=纯GUME, 1=纯RF)
+# rf_inference_mix_ratio: [0.2, 0.25, 0.3] # 推理时的混合比例
+rf_mix_ratio: 0
+rf_inference_mix_ratio: 0.02 # 0.02 # 0.02 # 0.2
+
+# 2-RF (Reflow) parameters
+use_2rf: False                   # Enable 2-Rectified Flow
+rf_2rf_transition_epoch: 20 # 20      # Start 2-RF at epoch 20 (default: warmup_epochs + 5)
+
+# Causal denoising parameters (IPW-based)
+use_denoise: False
+clean_rating_threshold: 5.0
+denoise_layers: 2
+ps_loss_weight: 0.1
+
+# ===== Training Settings =====
+epochs: 1000
+train_batch_size: 2048
+eval_batch_size: 4096
+stopping_step: 10
+
+mm_image_weight: 0.1
+
+# ===== Wasserstein 模态对齐（可选，易拉低指标，建议先关或小权重+warmup）=====
+# 图-文：Sliced W2 与 vt_loss 叠加；warmup 后再加、权重宜小（如 0.01）
+use_wasserstein_vt: False
+wasserstein_vt_weight: 0.01
+wasserstein_n_slices: 32
+wasserstein_warmup_epochs: 40    # 前 N epoch 不加 Wasserstein，再逐渐加
+# 生成-原始：增强表征 与 原始兴趣表征 分布对齐；detach 原始只拉近增强侧
+use_wasserstein_gen_align: False
+wasserstein_gen_weight: 0.01
+wasserstein_gen_detach_origin: True   # True 时只对增强表征反传，不拖累原始
+
+gen_cl_loss: 0.01 # [0.1, 0.05, 0.01, 0.001, 0.0001] 
+# ===== Dataset-Specific Configurations =====
+n_layers: 1 
+bm_temp: 0.1 
+um_loss: 0.1 
+vt_loss: 0.1 
+
+gen_cross_reference_save_path: "checkpoint/clothing_GenRecv2_origin.pt"
+gen_cross_reference_path: "checkpoint/clothing_GenRecv2_origin.pt"
+
+# hyper_parameters: ["n_ui_layers"]  ### 超参数搜索驱动
+
+
+
+
+### ########################################################### microlens ###########################################################
+# embedding_size: 64
+# learning_rate: 0.001
+# learning_rate_scheduler: [0.96, 20]
+
+# n_ui_layers: 4 # [1, 2, 3, 4, 5] # 4             # User-item graph convolution layers
+# knn_k: 10      # K for KNN graph construction
+# # Regularization
+# reg_weight_1: 1e-05         # L2 regularization weight for embeddings
+# reg_weight_2: 0.1           # L2 regularization weight for noise
+
+# # ===== Rectified Flow Parameters =====
+# use_rf: True                # Enable RF (set False for ablation)
+# # RF Network Architecture
+# rf_hidden_dim: 128          # 隐藏层维度
+# rf_n_layers:  3 # [1, 2, 3] # 2              # 网络层数
+# rf_dropout: 0.1             # Dropout率
+
+# # RF Training
+# rf_learning_rate: 0.0001 #[0.1, 0.01, 0.03, 0.001] # 0.0001     # RF模块独立学习率 0.0001
+# rf_sampling_steps: 20 #[1, 3, 5, 10, 20, 50] #3 # 20  #baby:3  sports:20                  [1, 3, 5, 10 , 20] # 20 # 10 # [1, 5, 20, 50] # 10        # ODE采样步数  结论: 越高越好
+# rf_loss_weight: 0.01 #baby:0.001  sports:0.01              [0.02, 0.03, 0.05, 0.001, 0.0001] # 0.01 # [0.01, 0.001, 0.0001]    0.001     # 对比损失的权重系数 # 
+# rf_weight: 0.3 # [0.1, 0.01, 0.001]  #0.1 # 跨模态对齐损失权重   结论：不太敏感
+
+# # User Interest Guidance (Prior Knowledge)
+# use_user_guidance: True      # 启用用户先验知识指导
+# user_guidance_scale: 0.7 #0.2 [0.8, 0.9, 1.0, 1.5, 2.0] # 0.7 # [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] # 0.2     # alpha_1: 用户先验的缩放因子
+# guidance_decay_power: 2.0    # lambda_1(t) = (1-t)^power 的指数（时间衰减）
+
+# # Cosine Similarity Gradient Guidance
+# use_cosine_guidance: True    # 启用余弦相似度梯度指导
+# cosine_guidance_scale: 0.1 # [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] # 0.1   # alpha_2: 余弦梯度的缩放因子
+# cosine_decay_power: 2.0      # lambda_2(t) = (1-t)^power 的指数（时间衰减）
+
+# # RF Warmup - 渐进式启用RF
+# rf_warmup_epochs: 10 #[5, 10, 20, 30, 40] # 用于探究RF预热步数的影响
+
+# # RF 混合策略
+# # rf_mix_ratio: [0.1, 0.15, 0.2]           # 训练时的混合比例 (0=纯GUME, 1=纯RF)
+# # rf_inference_mix_ratio: [0.2, 0.25, 0.3] # 推理时的混合比例
+# rf_mix_ratio: 0
+# rf_inference_mix_ratio: 0.02 # 0.02 # 0.02 # 0.2
+
+# # 2-RF (Reflow) parameters
+# use_2rf: False                   # Enable 2-Rectified Flow
+# rf_2rf_transition_epoch: 20 # 20      # Start 2-RF at epoch 20 (default: warmup_epochs + 5)
+
+# # Causal denoising parameters (IPW-based)
+# use_denoise: False
+# clean_rating_threshold: 5.0
+# denoise_layers: 2
+# ps_loss_weight: 0.1
+
+# # ===== Training Settings =====
+# epochs: 1000
+# train_batch_size: 2048
+# eval_batch_size: 4096
+# stopping_step: 10
+
+# mm_image_weight: 0.1
+
+# # ===== Wasserstein 模态对齐（可选，易拉低指标，建议先关或小权重+warmup）=====
+# # 图-文：Sliced W2 与 vt_loss 叠加；warmup 后再加、权重宜小（如 0.01）
+# use_wasserstein_vt: False
+# wasserstein_vt_weight: 0.01
+# wasserstein_n_slices: 32
+# wasserstein_warmup_epochs: 40    # 前 N epoch 不加 Wasserstein，再逐渐加
+# # 生成-原始：增强表征 与 原始兴趣表征 分布对齐；detach 原始只拉近增强侧
+# use_wasserstein_gen_align: False
+# wasserstein_gen_weight: 0.01
+# wasserstein_gen_detach_origin: True   # True 时只对增强表征反传，不拖累原始
+
+# gen_cl_loss: 0.01 # [0.1, 0.05, 0.01, 0.001, 0.0001] 
+# # ===== Dataset-Specific Configurations =====
+# n_layers: 1 
+# bm_temp: 0.1 
+# um_loss: 0.1 
+# vt_loss: 0.1 
+
+# gen_cross_reference_save_path: "checkpoint/microlens_GenRecv2_origin.pt"
+# gen_cross_reference_path: "checkpoint/microlens_GenRecv2_origin.pt"
+
+# hyper_parameters: ["n_ui_layers"]  ### 超参数搜索驱动

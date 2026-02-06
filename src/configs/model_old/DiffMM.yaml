@@ -1,0 +1,51 @@
+###### Baby ######
+# embedding_size: 64
+# n_layers: 1
+# reg_weight: 1.0e-5
+# ssl_reg: 1.0e-1
+# temperature: 0.5
+# keep_rate: 0.5
+
+# # Diffusion params
+# dims: [1000]
+# d_emb_size: 10
+# norm: False
+# steps: 5
+# noise_scale: 0.1
+# noise_min: 0.0001
+# noise_max: 0.02
+# sampling_noise: False
+# sampling_steps: 0
+# rebuild_k: 1
+# e_loss: 0.01
+# ris_lambda: 0.5
+# ris_adj_lambda: 0.2
+# trans_type: 0
+# cl_method: 0
+
+
+###### Sports ######
+embedding_size: 64
+n_layers: 1
+reg_weight: 1.0e-6
+ssl_reg: 1.0e-2
+temperature: 0.1
+keep_rate: 1
+
+# Diffusion params
+dims: [1000]
+d_emb_size: 10
+norm: False
+steps: 5
+noise_scale: 0.1
+noise_min: 0.0001
+noise_max: 0.02
+sampling_noise: False
+sampling_steps: 0
+rebuild_k: 1
+e_loss: 0.5
+ris_lambda: 0.1
+ris_adj_lambda: 0.2
+trans_type: 0
+cl_method: 0
+

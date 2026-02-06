@@ -1,0 +1,43 @@
+########## baby ##########
+embedding_size: 64
+feat_embed_dim: 64
+
+n_mm_layers: 1
+n_layers: 2
+knn_k: 10
+mm_image_weight: 0.1
+learning_rate: 0.001 # [0.0010.1, 0.01, 0.001, 0.0001]
+reg_weight: 0.0001 # [0.1, 0.01, 0.001, 0.0001]
+dropout: 0
+num_layer: 1 #[1, 2, 3, 4]
+# # hyper_parameters: ["reg_weight", "learning_rate", "dropout", "num_layer"]
+
+########## sports ##########
+# embedding_size: 64
+# feat_embed_dim: 64
+
+# n_mm_layers: 1
+# n_layers: 2
+# knn_k: 10
+# mm_image_weight: 0.1
+# learning_rate: 0.001 # [0.0010.1, 0.01, 0.001, 0.0001]
+# reg_weight: 0.001 # [0.1, 0.01, 0.001, 0.0001]
+# dropout: 0
+# num_layer: 2 #[1, 2, 3, 4]
+
+
+
+
+
+########## clothing ##########
+# embedding_size: 64
+# feat_embed_dim: 64
+
+# n_mm_layers: 1
+# n_layers: 2
+# knn_k: 10
+# mm_image_weight: 0.1
+# learning_rate: 0.001 # [0.0010.1, 0.01, 0.001, 0.0001]
+# reg_weight: 0.001 # [0.1, 0.01, 0.001, 0.0001]
+# dropout: 0
+# num_layer: 2 #[1, 2, 3, 4]

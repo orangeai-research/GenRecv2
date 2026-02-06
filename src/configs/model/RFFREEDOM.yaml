@@ -1,0 +1,28 @@
+embedding_size: 64
+feat_embed_dim: 64
+weight_size: [64, 64]
+
+lambda_coeff: 0.9
+reg_weight: 1e-05
+
+hyper_parameters: ["rf_loss_weight", "rf_learning_rate"]
+
+n_mm_layers: 1
+n_ui_layers: 2
+knn_k: 10
+
+mm_image_weight: 0.1
+dropout: 0.8
+
+# RF enhancement parameters (consistent with RFGUME)
+use_rf: True
+rf_hidden_dim: 128
+rf_n_layers: 2
+rf_dropout: 0.1
+rf_sampling_steps: 10
+rf_learning_rate: [0.00005, 0.0001, 0.0003, 0.0005, 0.001]
+rf_loss_weight: [0.01, 0.001, 0.0001]
+rf_warmup_epochs: 5
+rf_mix_ratio: 0.1
+rf_inference_mix_ratio: 0.2
+rf_contrast_temp: 0.2

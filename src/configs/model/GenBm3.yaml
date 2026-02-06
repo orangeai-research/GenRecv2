@@ -1,0 +1,53 @@
+# GenBm3: GenRecv2 的 forward/calculate_loss 可插拔到 BM3，用于实验
+# use_genrecv2_style=False: 纯 BM3 | True: 多模态图 + RF + gen_cl_loss + ps_loss
+
+# ===== 可插拔开关 =====
+use_genrecv2_style: True   # False=保留原始 BM3 逻辑，True=GenRecv2 风格
+
+# ===== Base (BM3) =====
+
+#########baby###########
+embedding_size: 64
+feat_embed_dim: 64
+
+n_layers: 1
+dropout: 0.3
+reg_weight: 0.1
+cl_weight: 2.0
+
+use_neg_sampling: False
+
+# ===== 多模态图 (与 RFBM3 一致，仅 use_genrecv2_style=True 时生效) =====
+knn_k: 10
+mm_image_weight: 0.1
+
+# ===== 协同信号增强对比学习 (GenRecv2 风格) =====
+gen_cl_loss: 0.01          # InfoNCE 权重
+bm_temp: 0.2               # InfoNCE 温度
+
+# ===== Rectified Flow =====
+use_rf: True
+
+rf_hidden_dim: 128
+rf_n_layers: 2
+rf_dropout: 0.1
+
+rf_learning_rate: 0.0001
+rf_sampling_steps: 10
+rf_warmup_epochs: 20
+rf_loss_weight: 0.001
+rf_mix_ratio: 0
+rf_inference_mix_ratio: 0.05
+
+use_2rf: False
+rf_2rf_transition_epoch: 20
+use_gradient_checkpointing: True
+
+# ===== 因果去噪 (可选) =====
+use_denoise: False
+clean_rating_threshold: 5.0
+denoise_layers: 2
+ps_loss_weight: 0.1
+
+
+

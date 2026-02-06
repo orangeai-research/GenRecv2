@@ -1,0 +1,22 @@
+# DiffRec Config
+embedding_size: 64
+learning_rate: 0.0001
+reg_weight: 0.0
+n_layers: 2 # MLP layers depth?
+dims: [300] # MLP hidden dimensions. e.g. [1000] in paper? Let's use smaller for default.
+activation: 'relu'
+dropout: 0.5
+
+# Diffusion
+steps: 100 # T
+noise_schedule: 'linear'
+noise_scale: 0.0001 # beta_start
+noise_min: 0.0001
+noise_max: 0.02
+sampling_steps: 0 # 0 means use 'steps' (T)
+
+# Training
+reweight: True # Importance sampling or loss weighting
+mean_type: 'x0' # Predict x0 directly
+steps_start: 0
+steps_end: 100

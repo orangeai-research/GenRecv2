@@ -1,0 +1,31 @@
+# CoDMR Config
+embedding_size: 64
+uiLayers: 2 #2
+au_uiLayers: 2 # 2
+learning_rate: 0.025
+learner: adam
+reg_weight: 0.004
+ssl_temp: 0.65
+steps: 8 # 
+sampling_steps: 5
+mean_type: 'eps'
+mean_typeNon: 'x0'
+noise_schedule: 'linear-var'
+noise_scale: 0.01
+noise_min: 0.0001
+noise_max: 0.01
+reweight: True
+mlp_dims: [8]
+norm: False
+emb_size: 10
+mlp_act_func: 'tanh'
+# optimizer2: 'AdamW'
+in_dims: '[64]'
+out_dims: '[64]'
+latent_size: 32 #8
+elbo_w: 0.035
+di_pre_w: 0.4
+con_fe_w: 0.02
+ssl_reg: 0.06
+knn_k: 10
+patience: 5 

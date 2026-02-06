@@ -1,0 +1,40 @@
+embedding_size: 64
+feat_embed_dim: 64
+
+n_layers: 1 # [1, 2]
+dropout: 0.3 # [0.3, 0.5]
+reg_weight: 0.1 # [0.1, 0.01]
+cl_weight: 2.0
+
+use_neg_sampling: False
+
+# hyper_parameters: ["rf_loss_weight", "rf_learning_rate"]
+
+# RF enhancement parameters (consistent with RFGUME)
+use_rf: True
+rf_hidden_dim: 128
+rf_n_layers: 2
+rf_dropout: 0.1
+rf_sampling_steps: 5
+# rf_learning_rate: [0.00005, 0.0001, 0.0003, 0.0005, 0.001]
+# rf_loss_weight: [0.01, 0.001, 0.0001]
+rf_learning_rate: 0.0001
+rf_loss_weight: 0.01
+rf_warmup_epochs: 20
+rf_mix_ratio: 0
+rf_inference_mix_ratio: 0.02
+rf_contrast_temp: 0.2
+
+# 2-RF (Reflow) parameters
+use_2rf: False                   # Enable 2-Rectified Flow
+rf_2rf_transition_epoch: 20   # Start 2-RF at epoch 20 (default: warmup_epochs + 5)
+
+# Causal denoising parameters (IPW-based)
+use_denoise: True
+clean_rating_threshold: 5.0
+denoise_layers: 2
+ps_loss_weight: 0.1
+
+# Wandb settings
+use_wandb: True
+wandb_project: "GenMMRec_new_metrics_denoise"  # wandb project name (optional, defaults to "GenMMRec")

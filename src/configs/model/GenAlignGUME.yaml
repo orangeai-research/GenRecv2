@@ -1,0 +1,45 @@
+embedding_size: 64
+learning_rate_scheduler: [0.96, 50]
+learning_rate: 0.001
+reg_weight_1: 1e-05
+knn_k: 10
+n_ui_layers: 3
+bm_loss: 0.01
+reg_weight_2: 0.1
+rf_weight: [0.5, 0.3, 0.01, 0.001] # 0.1
+# 模块二 Agent Modality
+agent_rf_weight: 0.1
+agent_weight: [0.01, 0.1, 0.2, 0.3, 0.4, 0.5] # 0.05
+agent_loss_weight: 1.0
+agent_warmup_epochs: 20
+t_agent: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8] # 0.9
+agent_step: 10
+
+hyper_parameters: ["t_agent", "agent_weight", "rf_weight"]
+# # baby
+n_layers: 2
+bm_temp: 0.4
+um_loss: 0.01
+um_temp: 0.1
+vt_loss: 0.1
+
+# # sports
+# n_layers: 1
+# bm_temp: 0.2
+# um_loss: 0.01
+# um_temp: 0.1
+# vt_loss: 0.01
+
+# # clothing
+# n_layers: 1
+# bm_temp: 0.2
+# um_loss: 0.1
+# um_temp: 0.2
+# vt_loss: 0.001
+
+# # elec
+# n_layers: 1
+# bm_temp: 0.2
+# um_loss: 0.1
+# um_temp: 0.2
+# vt_loss: 0.1

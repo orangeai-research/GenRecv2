@@ -1,0 +1,26 @@
+# MCDRec Config
+embedding_size: 64 # Must be square (e.g. 64=8x8) for U-Net reshaping
+lightGCN_n_layers: 2
+dropout: 0.0
+keep_prob: 0.8
+A_split: False
+# Diffusion
+steps: 100
+noise_scale: 0.0001
+noise_min: 0.0001
+noise_max: 0.02
+noise_schedule: 'linear-var'
+lambda_dm: 0.1 # Weight for Diffusion Loss
+# DGD
+tau: 0.5 # Score weight
+rho: 0.1 # Dropout proportion for DGD
+# Multimodal
+n_ui_layers: 2
+# Training
+learning_rate: 0.001
+weight_decay: 0.0001
+epochs: 1000
+batch_size: 2048
+eval_step: 1
+reweight: True
+mean_type: 'x0'

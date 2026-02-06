@@ -1,0 +1,49 @@
+# Modality Switcher
+visual_modality: True 
+text_modality: True
+audio_modality: False
+
+embedding_size: 64
+n_layers: 1
+reg_weight: 1.0e-5
+keep_rate: 0.5
+temperature: 0.55
+sparse_temp: 0.5
+ssl_reg1: 0.1
+ssl_reg2: 0.1
+ssl_gen1: 0.01
+ssl_gen2: 0.01
+ssl_gen3: 0.01
+
+# Clustering & Debiasing
+OpenInterestDebiase: True
+kmeans_cluster_num: 20
+use_auto_optimal_k: False
+sample_ratio: 0.1
+
+# Diffusion & Generation params
+gen_topk: 5
+rebuild_k: 10
+d_emb_size: 10
+nhead: 8
+num_layers: 6
+steps: 5
+flip_temp: 1.0
+bayesian_samplinge_schedule: True
+sampling_steps: 5
+knn_k: 10
+
+# Other
+keepRate: 1
+trans_type: 0
+cl_method: 0
+norm: True
+noise_scale: 0.1
+noise_min: 0.0001
+noise_max: 0.02
+sampling_noise: True
+e_loss: 0.01
+ris_lambda: 0.5
+ris_adj_lambda: 0.2
+
+
